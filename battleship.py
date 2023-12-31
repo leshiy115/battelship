@@ -10,8 +10,11 @@ import time
 
 
 class Ai:
-    # сделал функцию создания списка мест куда можно стрелять. при попадании ии будет искать следующую клетку коробля по индексу гор и верт +6-6 +1-1 если гор или верт ищет только там. если есить инфа об убийстве обновляет виртуалную доску и рандомит ход опять
-    def __init__(self, board, dif=1):  # !!! удалить  боард
+
+    """ ИИ. Требует экземпляр доски и уровень сложности.
+    на низком уровне сложности стреляет случайно по свободным клеткам. При попадании создает список следующих возможных позиций."""
+
+    def __init__(self, board, dif=1):
         self.b = board
         self.dif = dif
         self.hit_count = 0
@@ -19,13 +22,10 @@ class Ai:
         self.m3 = True
         self.m3_body = []
         self.m2_count = 2
-        self.rand = self.diagonal_shooting() if random.randint(1, 2) == 1 else self.diagonal_shooting_r()  # сначала создал одну функцию для выбора стребы по диагоналям или реверс диагоналям. она выбирала возвращала 1 из вариантов. но почему то иногда их перемешивала. получались гибридные списки. для м3 нормальные диагонали для м2 берется реверс. так и не понял почему.
+        self.rand = self.diagonal_shooting() if random.randint(1, 2) == 1 else self.diagonal_shooting_r()  # сначала создал одну функцию для выбора стрельбы по диагоналям или реверс диагоналям. она выбирала и возвращала 1 из вариантов. но почему-то иногда их перемешивала. получались гибридные списки. для м3 нормальные диагонали для м2 берется реверс. так и не понял почему.
         self.find_m3 = self.rand[0]
         self.find_m2 = self.rand[1]
         self.v_board = self.b.virt_board()[1]
-        ####3
-        self.all_shots = []
-        ####
 
 
     def diagonal_shooting(self):
@@ -78,7 +78,7 @@ class Ai:
             find_m2_r.extend(x)
         return [find_m3_r, find_m2_r]
 
-    def aming_shot(self):
+    def aiming_shot(self):
         pos_rand = random.choice(self.next_pos_hit)
         self.next_pos_hit.remove(pos_rand)
         if pos_rand in self.find_m3:
@@ -145,23 +145,19 @@ class Ai:
             pos_shot_cords = self.b.keys[pos_shot_id]
 
             if pos_shot_cords in self.v_board:
-                 next_shot.append(pos_shot_cords)
+                next_shot.append(pos_shot_cords)
             else:
                 continue
         if len(next_shot) == 0:
             raise BattleShipExc(f"ИИ проверил все возможные варианты выстрела и не выбрал"
-                                f"self.b.virt_board()[1] = {v_board}\n lst for next step={lst}/n"
+                                f"self.b.virt_board()[1] = {self.v_board}\n lst for next step={lst}/n"
                                 f"last_shot= {last_shot}")
         return next_shot
-
-        random.shuffle(lst)
-        print(lst)
-        return lst
 
 
     def tern(self, last_shot=None, last_shot_info=None):
         """Требует информацию о последнем выстреле.
-        str(last_shot) - координыты выстрела
+        str(last_shot) - координаты выстрела
         int(last_shot_info) - информация попал или нет"""
         self.v_board = self.b.virt_board()[1]
 
@@ -190,10 +186,10 @@ class Ai:
             self.m2_count -= 1
             self.m3_body.append(last_shot)
             self.next_pos_hit = self.if_hit(last_shot)  # метод создает список возможных координат для выстрела и сохраняет в классе.
-            return self.aming_shot()  # сам выстрел возвращается
+            return self.aiming_shot()  # сам выстрел возвращается
 
         if last_shot_info == 0 and self.hit_count == 1:  # я попадал до этого. еще раз из списка!
-            return self.aming_shot()
+            return self.aiming_shot()
 
         if last_shot_info == 1 and self.hit_count == 1:  # Это м3! Потому что у меня было попадание до этого!
             self.v_board = self.b.virt_board()[1]
@@ -205,7 +201,6 @@ class Ai:
             cord_1 = self.m3_body[0]
             cord_2 = self.m3_body[1]
             if cord_1[0] == cord_2[0]:
-                pos = 'v'
                 n_cord_1 = int(cord_1[1])
                 n_cord_2 = int(cord_2[1])
                 pos_n_1 = n_cord_1 + 1 if n_cord_1 > n_cord_2 else n_cord_2 + 1
@@ -219,7 +214,6 @@ class Ai:
                     if cord_pos_2 in self.v_board:
                         self.next_pos_hit.append(cord_pos_2)
             elif cord_1[1] == cord_2[1]:
-                pos = 'g'
                 l_cord_1 = cord_1[0]
                 l_cord_2 = cord_2[0]
                 pos_l_1 = chr(ord(l_cord_1) + 1) if l_cord_1 > l_cord_2 else chr(ord(l_cord_2) + 1)
@@ -240,17 +234,16 @@ class Ai:
             if len(self.next_pos_hit) == 0:
                 raise BattleShipExc(f'ИИ должен был создать максимум 2 варианта след выстрелов!'
                                     f'self.next_pos_hit={self.next_pos_hit}, '
-                                    f'self.m3_body={self.m3_body}, self.b.virt_board()[1]={self.v_board}'
-                                    f'cord_pos_2={cord_pos_2}, cord_pos_1={cord_pos_1}')
-            return self.aming_shot()
+                                    f'self.m3_body={self.m3_body}, self.b.virt_board()[1]={self.v_board}')
+            return self.aiming_shot()
 
         if last_shot_info == 0 and self.hit_count == 2:  # это точно м3! теперь я знаю куда стрелять
             self.m3 = False
-            return self.aming_shot()
+            return self.aiming_shot()
 
         if last_shot_info == 1 and self.hit_count == 2:  # это точно м3! теперь я знаю куда стрелять
             self.m3 = False
-            return self.aming_shot()
+            return self.aiming_shot()
 
         if last_shot_info not in [0, 1, 2] or self.hit_count > 2:
             raise BattleShipExc(f'ИИ стрелял по той же клетке или неправильно считал попадания'
@@ -290,7 +283,7 @@ class Game:
         ship_m_3 = []
 
         if pos == "v":
-            r_c = random.choice([x for x in rand_board if x[1] not in ['5', '6']])  # исключаем двени нижних линии для достаточного места. потому что тело корабля расчитывается от головы.
+            r_c = random.choice([x for x in rand_board if x[1] not in ['5', '6']])  # исключаем две нижних линии для достаточного места. потому что тело корабля рассчитывается от головы.
             ship = Ship(self.b, 3, r_c, pos)
             ship_m_3.append(ship)
             s_body = ship.body
@@ -356,7 +349,7 @@ class Game:
                             rand_board_c1.pop(contur_c)
                             rand_fleet_c1.update(dict([[contur_c, cell]]))
             else:
-                # k  # чем больше число тем сильнее 2м корабли жмутся к стенке, но быстрее генерация. не больше 12! иначе бесконечный цикл.
+                # k  # чем больше число тем сильнее 2-м корабли жмутся к стенке, но быстрее генерация. не больше 12! иначе бесконечный цикл.
                 if len(rand_board_c1.keys()) == k and len(ships_m_2) == 2:  ###!!!!
                     tic = 0
                     while True:  # цикл работает пока не разместит □ с контуром.
@@ -381,13 +374,12 @@ class Game:
                         else:
                             if len(ships_m_1) == 4:
                                 rand_fleet.update(rand_fleet_c2)
-                                flag = False
                                 ships = [ship_m_3, ships_m_2, ships_m_1]
                                 d_fleet = {"rand_fleet": rand_fleet, "ships": ships}
                                 return d_fleet
                             else:
                                 continue
-                        if tic > 50:  # если прошло много циклов а корабли не разместились заного генерим □□
+                        if tic > 50:  # если прошло много циклов, а корабли не разместились заново генерим □□
                             break
                         tic += 1
                         continue
@@ -395,45 +387,41 @@ class Game:
                     continue
 
     def greet(self):
-        flag = True
         while True:
-            if flag:
-                print("\nДобро пожаловать в игру Морской Бой! (только для версии python 3.7 и выше!)\n"
-                      "\nОбщие правила всем изветны, но оъясню нюансы данной версии игры:\n"
-                      "- Размер поля 6х6 клеток.\n"
-                      "- Флот может состоять из 1-го □□□, 2-х □□ и 4-х □.\n"
-                      "- Положение флота генерируется случайно соглачно общеизвестным правилам.\n"
-                      "- Вы не можете видет расположение флота ИИ если не задели или не потопили его корабль.\n"
-                      "- '□' - целый корпус корабля. '◙' - подбитая часть коробля. '■' - потопленный корабль полностью закрашивается.\n"
-                      "- '◦' - не обстреленная клетка моря. '◌' - обстреленная клетка моря.\n"
-                      "- Перед началом игры роисходит слачайный выбор за кем первый ход.\n"
-                      "- Для выстрела введите координаты в формате: 'a6' (Буквы вводятся латиницей).\n"
-                      "\n- Для игры через консоль в Pycharm желательно включить эмуляцию python консоли. Сделать это можно на панели Run в настройках кликнув на значок ключа под значком треугольника 'play'. Затем в Execution поставить галочку напротив 'Emulate terminal in output console'. В эти настройки также можно попасть через зажатие (Shift Alt F10). Или найдите соответсвующую настройку в среде которую вы используете. Без выполнения этих шагов экран консоли не будет очищаться от текста прошлого цикла.\n")
-                flag = False
+            print("\nДобро пожаловать в игру Морской Бой! (только для версии python 3.7 и выше!)\n"
+                  "\nОбщие правила всем известны, но объясню нюансы данной версии игры:\n"
+                  "- Размер поля 6х6 клеток.\n"
+                  "- Флот может состоять из 1-го □□□, 2-х □□ и 4-х □.\n"
+                  "- Положение флота генерируется случайно согласно общеизвестным правилам.\n"
+                  "- Вы не можете видеть расположение флота ИИ если не задели или не потопили его корабль.\n"
+                  "- '□' - целый корпус корабля. '◙' - подбитая часть корабля. '■' - потопленный корабль полностью закрашивается.\n"
+                  "- '◦' - не обстрелянная клетка моря. '◌' - обстрелянная клетка моря.\n"
+                  "- Перед началом игры происходит случайный выбор за кем первый ход.\n"
+                  "- Для выстрела введите координаты в формате: 'a6' (Буквы вводятся латиницей).\n"
+                  "\n- Для игры через консоль в Pycharm желательно включить эмуляцию python консоли. Сделать это можно на панели Run в настройках кликнув на значок ключа под значком треугольника 'play'. Затем в Execution поставить галочку напротив 'Emulate terminal in output console'. В эти настройки также можно попасть через зажатие (Shift Alt F10). Или найдите соответсвующую настройку в среде которую вы используете. Без выполнения этих шагов экран консоли не будет очищаться от текста прошлого цикла.\n")
             while True:
-                choise = input("    \nГлавное меню    \nВыберите один из вариантов, путем ввода символа.\n"
+                choice = input("    \nГлавное меню    \nВыберите один из вариантов, путем ввода символа.\n"
                                "'1' == Игра на низкой сложности.\n"
                                "'2' == Игра на средней сложности.\n"
                                "'3' == Повторно показать правила.\n"
                                "'q' == Выход.\n"
                                "Введите ваш выбор:  ")
-                if choise == '1':
+                if choice == '1':
                     print("Игра начинается! Для выхода обратно в меню в любой момент введите 'q")
                     os.system('cls')
                     self.b = Board()  # обновляем доску
                     self.dif = 1
                     self.loop()
 
-                elif choise == '2':
+                elif choice == '2':
                     print("Игра начинается! Для выхода обратно в меню в любой момент введите 'q")
                     os.system('cls')
                     self.b = Board()  # обновляем доску
                     self.dif = 2
                     self.loop()
-                elif choise == '3':
-                    flag = True
+                elif choice == '3':
                     break
-                elif choise == 'q':
+                elif choice == 'q':
                     sys.exit()
                 else:
                     print("Неправильный ввод!")
@@ -449,10 +437,10 @@ class Game:
             fleet_ai = self.rand_fleet(k=12)
         self.b.b_p.update(fleet_p["rand_fleet"])  # добавляет на поле игрока его флот.
         self.b.b_ai.update(fleet_ai["rand_fleet"])
-        self.d = Dots(fleet_p['ships'], fleet_ai['ships'])  # инициалезируем класс и даем ему информацию о флотах
+        self.d = Dots(fleet_p['ships'], fleet_ai['ships'])  # инициализируем класс и даем ему информацию о флотах
 
 
-        last_shot = None  # сохраняем передыдущий выстрел для ИИ
+        last_shot = None  # сохраняем предыдущий выстрел для ИИ
         last_shot_info = None  # информацию о результате выстрела
         self.b.show_board()
         rand_first_tern = random.randint(0, 1)
@@ -488,12 +476,12 @@ class Game:
                     return flag
 
                 if pl_shot not in self.b.keys:
-                    print("Неправельные координаты!\n")
+                    print("Неправильные координаты!\n")
                     continue
                 else:
                     break
             # pl_shot = next(self.auto_pl)  # для автоигры
-            time.sleep(2)
+            time.sleep(1.5)
             last_shot_info = self.b.shot('pl', pl_shot, self.d)
             self.b.show_board('pl', last_shot_info)
             print(f"\n\t\t\t   Игрок стреляет на {pl_shot}")
@@ -520,7 +508,7 @@ class Game:
 
     def ai_tern(self, last_shot, last_shot_info):
         flag = True
-        time.sleep(2.5)
+        time.sleep(2)
         while True:
             if last_shot_info in [1, 2]:
                 time.sleep(3)
