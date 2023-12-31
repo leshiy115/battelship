@@ -67,7 +67,7 @@ class Board:
 
     def emodzi(self, i, shooter=None, last_shot_info=None):
         ai_misses = ['(≖_≖ )', '(╥﹏╥)', 'ಥ_ಥ ']
-        pl_misses = ['(─‿‿─)', ' (•◡•) /']
+        pl_misses = ['(─‿‿─)', '(•◡•) / ']
 
         ai_hits = ['ᕙ(`▿´)ᕗ ', 'ᕙ(^▿^-ᕙ)', "(ง︡'-'︠)ง ", '¯\_( ͡`‿‿ ͡´)_/¯']
         pl_hits = ['٩(×̯×)۶ ', '( ˘︹˘ )', '(҂`︹´)ᕤ']
@@ -238,14 +238,9 @@ class Board:
                     return 'same'
                 elif self._b_p[xy] == '□':
                     damage = dots.damage(shooter, xy)  # изменение модели корабля и возвращать колл жизней
-                    # pl_ship_m3 = damage[2]
                     if 0 < damage[0] <= 3:
                         self._b_p.update(damage[1])
                         return 1
-                        # if pl_ship_m3:
-                        #     return pl_ship_m3
-                        # else:
-                        #     return 1
                     elif damage[0] == 0:
                         self._b_p.update(damage[1])
                         contur = self.contour(damage[1], True)

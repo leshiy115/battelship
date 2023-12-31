@@ -427,6 +427,7 @@ class Game:
                     print("Неправильный ввод!")
 
     def loop(self):
+        os.system('cls')
         # self.auto_pl = iter(self.b.keys)  # для автоигры
         self.ai = Ai(self.b, self.dif)
         if self.dif == 1:
@@ -490,8 +491,8 @@ class Game:
                 self.state = '\nСостояние флота ИИ -- | ' + " | ". join(state) + ' |'
             print(self.state)
             if not state:
-                print('\n\t\t\t     !!!!ВЫ ВЫИГРАЛИ!!!!\n')
                 self.pl_win += 1
+                print(f'\n\t\t\t     !!!!ВЫ ВЫИГРАЛИ!!!! Игрок - {self.pl_win}:{self.ai_win} - ИИ\n')
                 flag = False
                 break
             if last_shot_info == 0:
@@ -520,8 +521,8 @@ class Game:
             print(self.state)
             state = self.d.fleet_left('pl')
             if not state:
-                print('\n\t\t\t    !!!!ПОБЕДИТЕЛЬ ИИ!!!!\n')
                 self.ai_win += 1
+                print(f'\n\t\t\t    !!!!ПОБЕДИТЕЛЬ ИИ!!!! Игрок - {self.pl_win}:{self.ai_win} - ИИ\n')
                 flag = False
                 break
             if last_shot_info == 0:
