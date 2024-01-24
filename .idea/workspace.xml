@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="95a04781-242f-403e-9d03-8085f999a380" name="Changes" comment="орфография">
-      <change beforePath="$PROJECT_DIR$/battleship.py" beforeDir="false" afterPath="$PROJECT_DIR$/battleship.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/board.py" beforeDir="false" afterPath="$PROJECT_DIR$/board.py" afterDir="false" />
+    <list default="true" id="95a04781-242f-403e-9d03-8085f999a380" name="Changes" comment="all good">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -21,15 +20,15 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/git/BattelShip/battelship&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "last_opened_file_path": "D:/netology",
+    "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable"
   }
-}</component>
+}]]></component>
   <component name="RunManager">
     <configuration name="battleship" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="battelship" />
@@ -69,6 +68,8 @@
       <updated>1704005288437</updated>
       <workItem from="1704005289660" duration="3096000" />
       <workItem from="1704011478821" duration="23000" />
+      <workItem from="1704011586130" duration="213000" />
+      <workItem from="1704455991864" duration="40000" />
     </task>
     <task id="LOCAL-00001" summary="орфография">
       <created>1704008105957</created>
@@ -77,7 +78,21 @@
       <option name="project" value="LOCAL" />
       <updated>1704008105957</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="all good">
+      <created>1704011601309</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1704011601309</updated>
+    </task>
+    <task id="LOCAL-00003" summary="all good">
+      <created>1704011635614</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1704011635614</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -96,7 +111,8 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="орфография" />
-    <option name="LAST_COMMIT_MESSAGE" value="орфография" />
+    <MESSAGE value="all good" />
+    <option name="LAST_COMMIT_MESSAGE" value="all good" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/battleship_py$battleship.coverage" NAME="battleship Coverage Results" MODIFIED="1704011484287" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
